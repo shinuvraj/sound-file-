@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>GURU PLUS K-TET Practice Test - Psychology</title>
+  <style>
+  /* Base Reset & Mobile-First Variables */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --primary-color: #1B7A4A;
+    --primary-light: #E6F7EF;
+    --primary-dark: #145C37;
+    --accent-color: #5DDBA3;
+    --success-color: #1D9E75;
+    --success-bg: #EAF3DE;
+    --error-color: #E24B4A;
+    --error-bg: #FCEBEB;
+    --text-main: #2D3748;
+    --text-muted: #718096;
+    --border-color: #E2E8F0;
+  }
+
+  body {
+    background: linear-gradient(135deg, #0F2027 0%, #203A43 40%, #2C5364 100%);
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #app {
+    padding: 10px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Sticky Header/Top Bar Card */
+  .top-bar {
+    background: var(--primary-color);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    position: sticky;
+    top: 10px;
+    z-index: 100;
+  }
+
+  .top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+
+  .quiz-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #A8DFC4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 65%;
+  }
+
+  .q-badge {
+    background: #25A865;
+    color: #E6F7EF;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  .timer-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--primary-dark);
+    border-radius: 20px;
+    padding: 4px 12px;
+  }
+
+  .timer-label {
+    font-size: 10px;
+    color: #A8DFC4;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .timer-txt {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .timer-txt.red {
+    color: #F09595;
+    animation: pulse 1s infinite alternate;
+  }
+
+  @keyframes pulse {
+    from { opacity: 1; }
+    to { opacity: 0.7; }
+  }
+
+  /* Question Card Wrapper */
+  .q-container {
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  }
+
+  .q-num {
+    font-size: 11px;
+    color: var(--primary-color);
+    font-weight: 600;
+    background: var(--primary-light);
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .q-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-main);
+    line-height: 1.5;
+    margin-top: 8px;
+    margin-bottom: 14px;
+  }
+
+  /* Options Layout */
+  .opts {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 2px solid var(--border-color);
+    background: #fff;
+    transition: all 0.15s ease;
+    min-height: 48px;
+  }
+
+  .opt-key {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .opt-key.A { background: #E6F1FB; color: #0C447C; }
+  .opt-key.B { background: #FAEEDA; color: #633806; }
+  .opt-key.C { background: #FBEAF0; color: #72243E; }
+  .opt-key.D { background: #EAF3DE; color: #27500A; }
+
+  .opt-txt {
+    font-size: 13.5px;
+    color: var(--text-main);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  /* Selection States */
+  .opt.unanswered:active {
+    background: var(--primary-light);
+    border-color: #6FD4A8;
+  }
+
+  .opt.correct-ans {
+    border-color: var(--success-color);
+    background: var(--success-bg);
+    pointer-events: none;
+  }
+  .opt.correct-ans .opt-key {
+    background: var(--success-color);
+    color: #fff;
+  }
+  .opt.correct-ans .opt-txt {
+    color: #085041;
+    font-weight: 600;
+  }
+
+  .opt.wrong-ans {
+    border-color: var(--error-color);
+    background: var(--error-bg);
+    pointer-events: none;
+  }
+  .opt.wrong-ans .opt-key {
+    background: var(--error-color);
+    color: #fff;
+  }
+  .opt.wrong-ans .opt-txt {
+    color: #791F1F;
+  }
+
+  .opt.neutral-locked {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* Explanations block */
+  .exp-box {
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-top: 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    box-shadow: inset 2px 0 0px rgba(0,0,0,0.1);
+  }
+
+  .exp-box.correct {
+    background: var(--success-bg);
+    border: 1px solid #5DCAA5;
+    color: #085041;
+  }
+
+  .exp-box.wrong {
+    background: var(--error-bg);
+    border: 1px solid #F09595;
+    color: #791F1F;
+  }
+
+  .exp-label {
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  /* Bottom Submit Button Container */
+  .action-container {
+    margin-top: 8px;
+    margin-bottom: 24px;
+  }
+
+  .btn-submit-all {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    background: #1D9E75;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: background 0.2s;
+  }
+
+  .btn-submit-all:active {
+    transform: scale(0.99);
+  }
+
+  /* Result Dashboards */
+  .result-top {
+    background: var(--primary-color);
+    border-radius: 12px;
+    padding: 24px 14px;
+    text-align: center;
+    margin-bottom: 12px;
+    color: #fff;
+  }
+
+  .score-ring {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 4px solid var(--accent-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+  }
+
+  .score-big {
+    font-size: 30px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .score-sub {
+    font-size: 12px;
+    color: #A8DFC4;
+    margin-top: 2px;
+  }
+
+  .result-label {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .result-sub {
+    font-size: 13px;
+    color: #A8DFC4;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .stat-c {
+    border-radius: 10px;
+    padding: 10px 6px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  }
+
+  .stat-c.green { background: var(--success-bg); }
+  .stat-c.red { background: var(--error-bg); }
+  .stat-c.gray { background: #EDF2F7; }
+
+  .stat-n {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .stat-c.green .stat-n { color: var(--success-color); }
+  .stat-c.red .stat-n { color: var(--error-color); }
+  .stat-c.gray .stat-n { color: var(--text-main); }
+
+  .stat-l {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  /* Review Cards Section */
+  .review-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 16px 0 8px;
+    padding-left: 2px;
+  }
+
+  .r-card {
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    padding: 14px;
+    margin-bottom: 10px;
+    background: #fff;
+  }
+
+  .r-card.rc { border-left: 4px solid var(--success-color); }
+  .r-card.rw { border-left: 4px solid var(--error-color); }
+  .r-card.rs { border-left: 4px solid var(--text-muted); }
+
+  .r-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .r-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+
+  .r-badge.rc { background: var(--success-bg); color: #27500A; }
+  .r-badge.rw { background: var(--error-bg); color: #791F1F; }
+  .r-badge.rs { background: #EDF2F7; color: var(--text-muted); }
+
+  .r-qnum {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .r-qtxt {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-main);
+    line-height: 1.45;
+    margin-bottom: 8px;
+  }
+
+  .r-ans {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  .r-ans.correct { background: var(--success-bg); color: #085041; }
+  .r-ans.wrong { background: var(--error-bg); color: #791F1F; }
+
+  .r-exp {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    border-top: 1px solid var(--border-color);
+    padding-top: 8px;
+    margin-top: 8px;
+  }
+
+  .restart-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  @media(max-width: 350px) {
+    .quiz-title { font-size: 11px; }
+    .timer-txt { font-size: 14px; }
+    .opt-txt { font-size: 12.5px; }
+  }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <div id="view"></div>
+</div>
+
+<script>
+// ഗൂഗിളിന്റെ ഒഫീഷ്യൽ സെർവറിൽ നിന്നുള്ള ലൈവ് ഓഡിയോ യുആർഎലുകൾ (URLs) നേരിട്ട് കണക്ട് ചെയ്തിരിക്കുന്നു
+const sndCorrect = new Audio("https://actions.google.com/sounds/v1/cartoon/clapping_and_cheering_short.ogg");
+const sndWrong = new Audio("https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg");
+
+// തെറ്റായ ഉത്തരത്തിന്റെ അലാറം സൗണ്ട് പെട്ടെന്ന് കേട്ട് തീരാൻ വേണ്ടി സ്പീഡ് 1.5 ആക്കി കൂട്ടിയിട്ടുണ്ട്
+sndWrong.playbackRate = 1.5;
+
+const Q=[
+  {q:"Biological model of intellectual development is associated with:",o:["Piaget","Bruner","Sheldon","Cattell"],a:0,e:"Jean Piaget's theory of cognitive development is deeply rooted in biological concepts, framing intellectual growth as an extension of biological adaptation to the environment."},
+  {q:"Suitable combinations related to ICT:\n(a) Formative assessment\n(b) Hinders teacher-student relationship\n(c) Destroys creativity\n(d) Real-time interaction\n(e) Immediate feedback",o:["a, b, e","a, b, d","a, d, e","b, d, e"],a:2,e:"Information and Communication Technology (ICT) enhances learning by supporting formative assessment methods, enabling immediate analytical feedback, and allowing fluid real-time interactions."},
+  {q:"Industry vs Inferiority stage focuses on:",o:["Responsibility","Identity","Intimacy","Competence and skill mastery"],a:3,e:"According to Erik Erikson, the Industry vs. Inferiority stage (spanning middle childhood) centers around the development of competence through mastering new academic and social skills."},
+  {q:"Adolescence as a period of storm and stress indicates:",o:["Emotional detachment","Cognitive development","Challenges and turmoil","Emotional development"],a:2,e:"Coined by G. Stanley Hall, 'storm and stress' characterizes adolescence as an intense phase marked by emotional upheaval, psychological challenges, and cultural conflicts."},
+  {q:"Teacher leader can enhance school culture by:",o:["Competition","Ignoring teaching impact","Isolating low achievers","Modelling positive behaviour"],a:3,e:"Teacher leaders play a foundational role in shaping collaborative school cultures by actively modelling professional ethics, commitment, and empathetic classroom behaviours."},
+  {q:"Conditioned response gradually disappears:",o:["Type I Conditioning","Type II Conditioning","Extinction","Generalization"],a:2,e:"In behavioral psychology, extinction describes the complete or gradual disappearance of a conditioned response when the conditioned stimulus is repeatedly paired without the unconditioned stimulus."},
+  {q:"Kohlberg believed moral development is influenced by:",o:["Genetics only","Environment only","Culture and environment","Environment and genetics"],a:2,e:"Lawrence Kohlberg's cognitive developmental view proposes that progression through stages of moral reasoning is stimulated by environmental factors and structured social-cultural experiences."},
+  {q:"Heightened sensitivity to social evaluation:",o:["Peer pressure","Person perception","Social conformity","Imaginary audience"],a:3,e:"The 'imaginary audience' is an adolescent egocentric phenomenon where an individual falsely believes that they are the focus of everyone else's attention and evaluation."},
+  {q:"Reservation for persons with disabilities in educational institutions:",o:["3%","5%","7%","10%"],a:1,e:"Under the Rights of Persons with Disabilities (RPwD) Act, 2016, the mandated reservation quota for students with benchmark disabilities in government-aided higher education institutions is 5%."},
+  {q:"Reflective practitioner means:",o:["Self-evaluation and improvement","Caring teacher","Evaluates students","Evaluates teachers"],a:0,e:"A reflective practitioner consistently evaluates their own classroom teaching practices, identifying cognitive blind spots to iteratively improve pedagogical outcomes."},
+  {q:"Unlawful behaviour by minors:",o:["Youth misconduct","Adolescent transgressions","Youth abuse","Juvenile delinquency"],a:3,e:"Juvenile delinquency legally defines criminal actions, statutory rule violations, or structurally unlawful behavior committed by individuals under the statutory age of majority."},
+  {q:"Bruner's term for transforming information:",o:["Scaffolding","Discovery learning","Encoding","Spiraling"],a:2,e:"Jerome Bruner emphasized encoding as the process of structurally transforming information into an accessible internal cognitive representation."},
+  {q:"Ethical responsibility in assessment:",o:["Subjective grading","Fair and objective assessment","Ignore individual needs","Academic achievement only"],a:1,e:"The primary ethical imperative of educational assessment involves maintaining strict fairness, validity, and complete objectivity for all learners."},
+  {q:"New learning affects old learning recall:",o:["Retroactive interference","Proactive interference","Regression","Amnesia"],a:0,e:"Retroactive interference happens when newly acquired information acts backwards, inhibiting or disrupting the easy recall of older stored memories."},
+  {q:"Exploring roles to develop identity:",o:["Identity Moratorium","Identity Diffusion","Identity Foreclosure","Identity Crisis"],a:0,e:"James Marcia defined Identity Moratorium as a healthy exploration period where adolescents actively test alternate roles and options before committing to an identity choice."},
+  {q:"Factors increasing substance abuse vulnerability:\n(a) Academic excellence\n(b) Peer pressure\n(c) Low self-esteem\n(d) Strong parental binding\n(e) Family history of abuse",o:["b, c, e","a, b, d","a, b, c, e","b, d, e"],a:0,e:"Vulnerability indicators driving substance abuse include direct negative peer pressure, poor self-esteem profiles, and family histories involving substance dependencies."},
+  {q:"Correct statements regarding motivation:\n(a) Intrinsic motivation is short-lived\n(b) Extrinsic motivation is always negative\n(c) Intrinsic motivation promotes deep learning\n(d) Extrinsic motivation uses external rewards\n(e) Motivation sustains goal-directed behavior",o:["b, c, d, e","a, c, e","c, d, e","c, e"],a:2,e:"Intrinsic motivation fosters deeper cognitive processing, extrinsic motivation leverages external milestones, and general motivation keeps behaviors purposefully goal-directed."},
+  {q:"ZPD suggests learning is most effective when:",o:["At learner's current level","Too easy","Too difficult","Totally unfamiliar"],a:0,e:"Lev Vygotsky's Zone of Proximal Development indicates that learning is optimized when tasks sit just beyond independent mastery but remain manageable with guidance."},
+  {q:"Purpose of defence mechanisms:",o:["Emotional expression","Reduce anxiety","Escape reality","Distress others"],a:1,e:"In psychodynamic frameworks, ego defense mechanisms function unconsciously to lower psychological anxiety and guard the ego from emotional distress."},
+  {q:"Gestalt closure:",o:["Common movement","Common background","Fill missing parts","Similarity"],a:2,e:"The Gestalt principle of closure states that human perception naturally fills in missing structural visual gaps to construct a complete, coherent shape or idea."},
+  {q:"Guilford's creativity components:",o:["Analysis-Synthesis-Evaluation","Preparation-Incubation-Illumination","Fluency-Flexibility-Originality","Intelligence-Convergent thinking"],a:2,e:"J.P. Guilford identified Fluency (idea volume), Flexibility (category shift), and Originality (uniqueness) as core traits of divergent thinking and creativity."},
+  {q:"Modifying existing knowledge structure:",o:["Assimilation","Accommodation","Equilibration","Schema"],a:1,e:"Piaget's 'accommodation' involves modifying an internal cognitive structure (schema) to cleanly incorporate new environmental information that does not fit current concepts."},
+  {q:"Positive teacher-student relationship:\n(a) Dictatorial control\n(b) Mutual respect and trust\n(c) Favoritism\n(d) Clear and empathetic communication\n(e) Discouraging student input",o:["a, b, d","b, d","b, d, e","b, c, d"],a:1,e:"Healthy classroom environments rely fundamentally on building strong mutual trust and maintaining open, highly empathetic teacher-student dialogue."},
+  {q:"Skill development and employment opportunities for PwDs:",o:["NIT","NIEPID","NASDD","NSDC"],a:1,e:"The National Institute for the Empowerment of Persons with Intellectual Disabilities (NIEPID) works to design systematic vocational training and life skills for individual independence."},
+  {q:"Emotional processing region in adolescence:",o:["Hippocampus","Cerebellum","Amygdala","Frontal Cortex"],a:2,e:"During early adolescence, emotional reactions are heavily governed by the reactive amygdala, as the planning-focused prefrontal cortex is still structurally developing."},
+  {q:"Ausubel's concept:",o:["Subsumption","Adaptation","Expository learning","Superordinate learning"],a:0,e:"David Ausubel's assimilation theory details 'subsumption' as the cognitive process where fresh learning material is anchored directly beneath broader, pre-existing concepts."},
+  {q:"Learning disability means:",o:["Permanent intellectual condition","Neurological condition affecting academics","Temporary intellectual condition","Physiological condition"],a:1,e:"A specific learning disability (e.g., dyslexia, dyscalculia) is a neurological condition that alters cognitive processing, affecting basic academic skills like reading or computing."},
+  {q:"Freud: unresolved conflicts lead to:",o:["Fixation","Emotional stability","Mental maturity","Projection"],a:0,e:"Sigmund Freud postulated that overindulgence or frustration during a psychosexual development stage causes a fixation, halting healthy emotional energy progression."},
+  {q:"Goal in supporting intellectual disabilities:",o:["Academic achievement only","Segregation","Reduce adaptive skills","Social-emotional well-being"],a:3,e:"Pedagogical planning for individuals with intellectual disabilities prioritizes personal self-care skills, life autonomy, and positive social-emotional adjustment."},
+  {q:"Purpose of formative assessment:",o:["Final grades","Comparison","Identify improvement areas","Ranking"],a:2,e:"Formative assessment is an ongoing diagnostic tool used by educators to track progress and identify structural improvement areas during instruction."},
+  {q:"Managing stress and challenges:",o:["Projection","Regression","Coping mechanism","Avoidance"],a:2,e:"Coping mechanisms comprise the cognitive, behavioral, and adaptive strategies individuals activate to regulate internal stressors and external life conflicts."},
+  {q:"Spiral curriculum:",o:["Action representation","Repetition only","Increasing complexity","Complex to simple"],a:2,e:"Jerome Bruner's spiral curriculum reintroduces core concepts at expanding tiers of depth and complexity, matching the learner's evolving cognitive capacities."},
+  {q:"Focus areas in KCF 2023:",o:["22","24","26","28"],a:2,e:"The Kerala Curriculum Framework (KCF) 2023 outlines 26 unique focus areas and perspective positions to reform regional school education paradigms."},
+  {q:"Focus of IEP:",o:["Showcase achievement","Personalized goals and services","Cultural awareness","Separate classes"],a:1,e:"An Individualized Education Program (IEP) maps out unique, highly customized developmental goals, classroom accommodations, and special education services for a student."},
+  {q:"Additional opportunities for gifted children:",o:["Inclusion","Compensation","Enrichment","Mainstreaming"],a:2,e:"Educational enrichment strategies extend the curriculum depth for gifted learners, offering advanced study pathways without jumping grade levels."},
+  {q:"Legal concept for juvenile offenders:",o:["Juvenile privilege","IPC","CrPC","Parens patriae"],a:3,e:"'Parens patriae' is the legal doctrine designating the state as the ultimate protective guardian of minors, emphasizing systemic rehabilitation over raw punishment."},
+  {q:"Managing adolescent independence:",o:["Open communication","Ignore behaviour","Minimize peer interaction","Discourage autonomy"],a:0,e:"Supporting adolescent autonomy requires parents and teachers to practice open communication, balanced guidance, and active perspective-taking."},
+  {q:"Aids and appliances for PwDs:",o:["Adaptive technology","Assistive technology","Accommodative technology","Anchoring technology"],a:1,e:"Assistive technology encompasses specialized screen readers, physical apparatuses, and custom software solutions designed to maximize functional learning accessibility."},
+  {q:"Intelligence for finding directions:",o:["Intrapersonal","Visual-Spatial","Naturalistic","Kinesthetic"],a:1,e:"Howard Gardner's theory labels visual-spatial intelligence as the foundational cognitive ability to mentally process, manipulate, and navigate spatial coordinates."},
+  {q:"Major achievement of Sensorimotor Stage:",o:["Object permanence","Reversibility","Animism","Seriation"],a:0,e:"The hallmark cognitive milestone of Piaget's sensorimotor stage (birth to age two) is object permanence—the understanding that items continue to exist even when hidden from view."}
+];
+
+const KEYS=['A','B','C','D'];
+let ans=new Array(Q.length).fill(-1);
+let done=new Array(Q.length).fill(false);
+
+// Global countdown: 30 minutes
+let globalTimeLeft = 1800; 
+let globalTmr = null;
+
+function startGlobalTimer(){
+  if(globalTmr) return; 
+  updTimerDisplay();
+  globalTmr = setInterval(()=>{
+    globalTimeLeft--;
+    updTimerDisplay();
+    if(globalTimeLeft <= 0){
+      clearInterval(globalTmr);
+      globalTmr = null;
+      showResults();
+    }
+  }, 1000);
+}
+
+function updTimerDisplay(){
+  const el = document.getElementById('tmr');
+  if(!el) return;
+  const mins = Math.floor(globalTimeLeft / 60);
+  const secs = globalTimeLeft % 60;
+  el.textContent = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
+  if(globalTimeLeft <= 120){
+    el.className = 'timer-txt red';
+  } else {
+    el.className = 'timer-txt';
+  }
+}
+
+function renderAllQuestions(){
+  let html = `
+  <div class="top-bar">
+    <div class="top-row" style="gap: 10px; margin-bottom: 8px; justify-content: flex-start;">
+      <img src="myphoto.jpeg" alt="GURU PLUS" style="width: 35px; height: 35px; border-radius: 6px; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); flex-shrink: 0;">
+      <span class="quiz-title" style="font-size: 13.5px; white-space: normal; max-width: 100%; line-height: 1.3; font-weight: 700; color: #fff;">GURU PLUS K-TET PSYCHOLOGY PRACTICE SERIES</span>
+    </div>
+    <div class="top-row">
+      <div class="timer-pill">
+        <span class="timer-label" style="margin-right:4px;">Time Left:</span>
+        <span class="timer-txt" id="tmr">30:00</span>
+      </div>
+      <span class="q-badge">Total Questions: ${Q.length}</span>
+    </div>
+  </div>`;
+
+  Q.forEach((q, qIdx) => {
+    const isD = done[qIdx];
+    const ua = ans[qIdx];
+    
+    let optsHtml = q.o.map((o, oIdx) => {
+      let cls = 'opt';
+      if (isD) {
+        if (oIdx === q.a) cls += ' correct-ans';
+        else if (oIdx === ua) cls += ' wrong-ans';
+        else cls += ' neutral-locked';
+      } else {
+        cls += ' unanswered';
+      }
+      return `<div class="${cls}" onclick="pick(${qIdx}, ${oIdx})"><span class="opt-key ${KEYS[oIdx]}">${KEYS[oIdx]}</span><span class="opt-txt">${o}</span></div>`;
+    }).join('');
+
+    let expHtml = '';
+    if (isD) {
+      const ok = ua === q.a;
+      expHtml = `<div class="exp-box ${ok?'correct':'wrong'}"><div class="exp-label">${ok?'✓ Correct!':'✗ Incorrect'}</div>${q.e}</div>`;
+    }
+
+    html += `
+    <div class="q-container" id="q-box-${qIdx}">
+      <div class="q-num">Question ${qIdx + 1}</div>
+      <div class="q-text">${q.q.replace(/\n/g, '<br>')}</div>
+      <div class="opts">${optsHtml}</div>
+      ${expHtml}
+    </div>`;
+  });
+
+  html += `
+  <div class="action-container">
+    <button class="btn-submit-all" onclick="showResults()">Submit Test</button>
+  </div>`;
+
+  document.getElementById('app').innerHTML = html;
+  updTimerDisplay();
+}
+
+function pick(qIdx, oIdx){
+  if(done[qIdx]) return;
+  ans[qIdx] = oIdx;
+  done[qIdx] = true;
+  
+  const q = Q[qIdx];
+  const ua = ans[qIdx];
+  const ok = ua === q.a;
+
+  // ഓഡിയോ പ്ലേ ചെയ്യുന്ന ഭാഗം (തടസ്സമില്ലാതെ പ്ലേ ചെയ്യാൻ ഓഡിയോ ടൈം ആദ്യം സീറോ ആക്കുന്നു)
+  if (ok) {
+    sndCorrect.currentTime = 0;
+    sndCorrect.play().catch(e => console.log("Audio play blocked"));
+  } else {
+    sndWrong.currentTime = 0;
+    sndWrong.play().catch(e => console.log("Audio play blocked"));
+  }
+  
+  const qBox = document.getElementById(`q-box-${qIdx}`);
+  if(qBox) {
+    let optsHtml = q.o.map((o, idx) => {
+      let cls = 'opt';
+      if (idx === q.a) cls += ' correct-ans';
+      else if (idx === ua) cls += ' wrong-ans';
+      else cls += ' neutral-locked';
+      return `<div class="${cls}" onclick="pick(${qIdx}, ${idx})"><span class="opt-key ${KEYS[idx]}">${KEYS[idx]}</span><span class="opt-txt">${o}</span></div>`;
+    }).join('');
+
+    let expHtml = `<div class="exp-box ${ok?'correct':'wrong'}"><div class="exp-label">${ok?'✓ Correct!':'✗ Incorrect'}</div>${q.e}</div>`;
+
+    qBox.innerHTML = `
+      <div class="q-num">Question ${qIdx + 1}</div>
+      <div class="q-text">${q.q.replace(/\n/g, '<br>')}</div>
+      <div class="opts">${optsHtml}</div>
+      ${expHtml}
+    `;
+  }
+}
+
+function showResults(){
+  if(globalTmr) {
+    clearInterval(globalTmr);
+    globalTmr = null;
+  }
+  let c=0,w=0,s=0;
+  ans.forEach((a,i)=>{if(a===-1)s++;else if(a===Q[i].a)c++;else w++;});
+  const pct=Math.round((c/Q.length)*100);
+  const grade=pct>=80?'Excellent!':pct>=60?'Good effort!':pct>=40?'Keep practising':'Keep going!';
+  
+  let rev=Q.map((q,i)=>{
+    const ua=ans[i], isC=ua===q.a, isS=ua===-1;
+    const rc=isS?'rs':isC?'rc':'rw';
+    const bl=isS?'Skipped':isC?'Correct':'Wrong';
+    return `<div class="r-card ${rc}">
+      <div class="r-head"><span class="r-badge ${rc}">${bl}</span><span class="r-qnum">Q${i+1}</span></div>
+      <div class="r-qtxt">${q.q.replace(/\n/g, '<br>')}</div>
+      ${!isS&&!isC?`<div class="r-ans wrong">Your answer: ${KEYS[ua]}. ${q.o[ua]}</div>`:''}
+      <div class="r-ans correct">Correct: ${KEYS[q.a]}. ${q.o[q.a]}</div>
+      <div class="r-exp">${q.e}</div>
+    </div>`;
+  }).join('');
+  
+  document.getElementById('app').innerHTML=`
+  <div class="result-top">
+    <div class="score-ring"><span class="score-big">${c}</span><span class="score-sub">/ ${Q.length}</span></div>
+    <div class="result-label">${grade}</div>
+    <div class="result-sub">${pct}% · ${c} correct out of ${Q.length}</div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-c green"><div class="stat-n">${c}</div><div class="stat-l">Correct</div></div>
+    <div class="stat-c red"><div class="stat-n">${w}</div><div class="stat-l">Wrong</div></div>
+    <div class="stat-c gray"><div class="stat-n">${s}</div><div class="stat-l">Skipped</div></div>
+  </div>
+  <div class="review-title">Full review</div>
+  ${rev}
+  <button class="restart-btn" onclick="restartQuiz()">Restart quiz</button>`;
+  window.scrollTo(0,0);
+}
+
+function restartQuiz(){
+  ans=new Array(Q.length).fill(-1);
+  done=new Array(Q.length).fill(false);
+  globalTimeLeft = 1800;
+  startGlobalTimer();
+  renderAllQuestions();
+  window.scrollTo(0,0);
+}
+
+// Start sequence
+startGlobalTimer();
+renderAllQuestions();
+</script>
+
+</body>
+</html>
